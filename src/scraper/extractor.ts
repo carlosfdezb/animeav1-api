@@ -222,15 +222,17 @@ function extractCatalogItemsFromHtml(html: string): CatalogItem[] {
 export async function getCatalog(params: {
   page?: number;
   letter?: string;
+  genre?: string;
   category?: string;
   minYear?: number;
   maxYear?: number;
   status?: string;
 } = {}): Promise<{ items: CatalogItem[]; total: number }> {
-  const { page = 1, letter, category, minYear, maxYear, status } = params;
+  const { page = 1, letter, genre, category, minYear, maxYear, status } = params;
 
   let url = `${BASE_URL}/catalogo?page=${page}`;
   if (letter) url += `&letter=${letter}`;
+  if (genre) url += `&genre=${genre}`;
   if (category) url += `&category=${category}`;
   if (minYear) url += `&minYear=${minYear}`;
   if (maxYear) url += `&maxYear=${maxYear}`;

@@ -46,6 +46,7 @@ Lists catalog with optional filters.
 **Params:**
 - `page?: number` - Page number (default: 1)
 - `letter?: string` - Filter by first letter (A-Z)
+- `genre?: string` - Genre slug (accion, romance, etc)
 - `category?: string` - Category (tv-anime, pelicula, ova, especial)
 - `minYear?: number` - Minimum release year
 - `maxYear?: number` - Maximum release year

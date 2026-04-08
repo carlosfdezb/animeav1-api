@@ -221,20 +221,19 @@ function extractCatalogItemsFromHtml(html: string): CatalogItem[] {
  */
 export async function getCatalog(params: {
   page?: number;
-  pageSize?: number;
   letter?: string;
-  genre?: string;
-  type?: string;
-  year?: number;
+  category?: string;
+  minYear?: number;
+  maxYear?: number;
   status?: string;
 } = {}): Promise<{ items: CatalogItem[]; total: number }> {
-  const { page = 1, letter, genre, type, year, status } = params;
+  const { page = 1, letter, category, minYear, maxYear, status } = params;
 
   let url = `${BASE_URL}/catalogo?page=${page}`;
   if (letter) url += `&letter=${letter}`;
-  if (genre) url += `&genre=${genre}`;
-  if (type) url += `&type=${type}`;
-  if (year) url += `&year=${year}`;
+  if (category) url += `&category=${category}`;
+  if (minYear) url += `&minYear=${minYear}`;
+  if (maxYear) url += `&maxYear=${maxYear}`;
   if (status) url += `&status=${status}`;
 
   const response = await fetch(url);

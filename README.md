@@ -46,9 +46,9 @@ Lists catalog with optional filters.
 **Params:**
 - `page?: number` - Page number (default: 1)
 - `letter?: string` - Filter by first letter (A-Z)
-- `genre?: string` - Genre slug (aventura, drama, etc)
-- `type?: string` - Type (tv-anime, ova, pelicula, etc)
-- `year?: number` - Release year
+- `category?: string` - Category (tv-anime, pelicula, ova, especial)
+- `minYear?: number` - Minimum release year
+- `maxYear?: number` - Maximum release year
 - `status?: string` - Status (en-emision, finalizado, etc)
 
 **Returns:** `Promise<{ items: CatalogItem[]; total: number }>`

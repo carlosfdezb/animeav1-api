@@ -1,4 +1,4 @@
-import type { Anime, CatalogItem, EpisodeDetail } from '../types';
+import type { Anime, CatalogItem, CatalogParams, EpisodeDetail } from '../types';
 
 const BASE_URL = 'https://animeav1.com';
 const CDN_BASE = 'https://cdn.animeav1.com';
@@ -217,26 +217,30 @@ function extractCatalogItemsFromHtml(html: string): CatalogItem[] {
 }
 
 /**
+ * Appends a URL parameter, handling string, string array, and undefined values.
+ * Arrays produce repeated params: &genre=comedia&genre=deportes
+ */
+function appendParam(url: string, key: string, value: string | string[] | number | undefined): string {
+  if (value === undefined) return url;
+  if (Array.isArray(value)) {
+    return value.reduce((u, v) => u + `&${key}=${encodeURIComponent(v)}`, url);
+  }
+  return url + `&${key}=${encodeURIComponent(value)}`;
+}
+
+/**
  * Gets the anime catalog with optional filtering
  */
-export async function getCatalog(params: {
-  page?: number;
-  letter?: string;
-  genre?: string;
-  category?: string;
-  minYear?: number;
-  maxYear?: number;
-  status?: string;
-} = {}): Promise<{ items: CatalogItem[]; total: number }> {
+export async function getCatalog(params: CatalogParams = {}): Promise<{ items: CatalogItem[]; total: number }> {
   const { page = 1, letter, genre, category, minYear, maxYear, status } = params;
 
   let url = `${BASE_URL}/catalogo?page=${page}`;
-  if (letter) url += `&letter=${letter}`;
-  if (genre) url += `&genre=${genre}`;
-  if (category) url += `&category=${category}`;
-  if (minYear) url += `&minYear=${minYear}`;
-  if (maxYear) url += `&maxYear=${maxYear}`;
-  if (status) url += `&status=${status}`;
+  url = appendParam(url, 'letter', letter);
+  url = appendParam(url, 'genre', genre);
+  url = appendParam(url, 'category', category);
+  url = appendParam(url, 'minYear', minYear);
+  url = appendParam(url, 'maxYear', maxYear);
+  url = appendParam(url, 'status', status);
 
   const response = await fetch(url);
   const html = await response.text();

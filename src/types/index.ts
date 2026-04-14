@@ -130,10 +130,21 @@ export interface CatalogResponse {
   totalPages: number;
 }
 
+// CatalogParams represents parameters for catalog listing
+export interface CatalogParams {
+  page?: number;
+  letter?: string;
+  genre?: string | string[];
+  category?: string;
+  minYear?: number;
+  maxYear?: number;
+  status?: string;
+}
+
 // SearchParams represents search/filter parameters
 export interface SearchParams {
   query?: string;
-  genre?: string;
+  genre?: string | string[];
   type?: string;
   year?: number;
   status?: string;

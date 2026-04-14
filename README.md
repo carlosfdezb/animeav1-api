@@ -24,6 +24,10 @@ const catalog = await getCatalog({ page: 1, genre: 'aventura' });
 console.log(catalog.items);      // CatalogItem[]
 console.log(catalog.total);      // 1000
 
+// Multi-genre filtering (OR logic - returns results matching ANY genre)
+const multiGenre = await getCatalog({ genre: ['comedia', 'deportes'] });
+console.log(multiGenre.items);   // Anime matching comedia OR deportes
+
 // Search by text
 const results = await searchAnime('Frieren');
 console.log(results[0].title);  // "Sousou no Frieren 2nd Season"
@@ -46,7 +50,7 @@ Lists catalog with optional filters.
 **Params:**
 - `page?: number` - Page number (default: 1)
 - `letter?: string` - Filter by first letter (A-Z)
-- `genre?: string` - Genre slug (accion, romance, etc)
+- `genre?: string | string[]` - Genre slug(s) (accion, romance, etc). Array for multiple genres (OR logic).
 - `category?: string` - Category (tv-anime, pelicula, ova, especial)
 - `minYear?: number` - Minimum release year
 - `maxYear?: number` - Maximum release year
@@ -67,6 +71,17 @@ Gets specific episode info with mirrors and downloads.
 ## Types
 
 ```typescript
+// Catalog filtering parameters
+interface CatalogParams {
+  page?: number;
+  letter?: string;
+  genre?: string | string[];
+  category?: string;
+  minYear?: number;
+  maxYear?: number;
+  status?: string;
+}
+
 interface Anime {
   id: number;
   title: string;

@@ -1,4 +1,5 @@
 # animeav1-api
+![npm](https://img.shields.io/npm/v/animeav1-api) ![downloads](https://img.shields.io/npm/dm/animeav1-api) ![license](https://img.shields.io/npm/l/animeav1-api) ![bundle](https://img.shields.io/bundlephobia/minzip/animeav1-api) ![GitHub stars](https://img.shields.io/github/stars/carlosfdezb/animeav1-api)
 
 > Unofficial API for scraping AnimeAV1 data
 
@@ -28,6 +29,14 @@ console.log(catalog.total);      // 1000
 const multiGenre = await getCatalog({ genre: ['comedia', 'deportes'] });
 console.log(multiGenre.items);   // Anime matching comedia OR deportes
 
+// Sort catalog by popularity
+const popular = await getCatalog({ order: 'popular' });
+console.log(popular.items);      // Most popular anime first
+
+// Combine with other filters
+const recent = await getCatalog({ genre: 'accion', order: 'latest_released' });
+console.log(recent.items);       // Recently released accion anime
+
 // Search by text
 const results = await searchAnime('Frieren');
 console.log(results[0].title);  // "Sousou no Frieren 2nd Season"
@@ -55,6 +64,7 @@ Lists catalog with optional filters.
 - `minYear?: number` - Minimum release year
 - `maxYear?: number` - Maximum release year
 - `status?: string` - Status (en-emision, finalizado, etc)
+- `order?: CatalogOrder` - Sort order (score, popular, title, latest_added, latest_released)
 
 **Returns:** `Promise<{ items: CatalogItem[]; total: number }>`
 
@@ -80,7 +90,10 @@ interface CatalogParams {
   minYear?: number;
   maxYear?: number;
   status?: string;
+  order?: CatalogOrder;
 }
+
+export type CatalogOrder = 'score' | 'popular' | 'title' | 'latest_added' | 'latest_released';
 
 interface Anime {
   id: number;

@@ -232,7 +232,7 @@ function appendParam(url: string, key: string, value: string | string[] | number
  * Gets the anime catalog with optional filtering
  */
 export async function getCatalog(params: CatalogParams = {}): Promise<{ items: CatalogItem[]; total: number }> {
-  const { page = 1, letter, genre, category, minYear, maxYear, status } = params;
+  const { page = 1, letter, genre, category, minYear, maxYear, status, order } = params;
 
   let url = `${BASE_URL}/catalogo?page=${page}`;
   url = appendParam(url, 'letter', letter);
@@ -241,6 +241,7 @@ export async function getCatalog(params: CatalogParams = {}): Promise<{ items: C
   url = appendParam(url, 'minYear', minYear);
   url = appendParam(url, 'maxYear', maxYear);
   url = appendParam(url, 'status', status);
+  url = appendParam(url, 'order', order);
 
   const response = await fetch(url);
   const html = await response.text();

@@ -110,6 +110,9 @@ export interface Anime {
   relations: RelatedAnime[];
 }
 
+// CatalogOrder represents sort order options for catalog listing
+export type CatalogOrder = 'score' | 'popular' | 'title' | 'latest_added' | 'latest_released';
+
 // CatalogItem represents a single anime in the catalog listing
 export interface CatalogItem {
   id: number;
@@ -139,6 +142,7 @@ export interface CatalogParams {
   minYear?: number;
   maxYear?: number;
   status?: string;
+  order?: CatalogOrder;
 }
 
 // SearchParams represents search/filter parameters

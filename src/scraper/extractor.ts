@@ -324,19 +324,23 @@ export async function getEpisode(animeSlug: string, episodeNumber: number): Prom
 
   try {
     const data = JSON.parse(jsonArray);
-    // data[3] contains the episode object on episode pages
-    const episodeData = data[3]?.data;
-    if (!episodeData) return null;
 
-    // Build episode detail object with episode info + embeds + downloads
-    const episode = episodeData.episode;
-    const episodeDetail: EpisodeDetail = {
-      ...episode,
-      embeds: episodeData.embeds || { SUB: [], DUB: [] },
-      downloads: episodeData.downloads || { SUB: [], DUB: [] },
-    };
+    // Find the data slot containing the episode object on episode pages
+    for (const slot of data) {
+      if (slot?.data?.episode) {
+        const episodeData = slot.data;
+        const episode = episodeData.episode;
+        const episodeDetail: EpisodeDetail = {
+          ...episode,
+          embeds: episodeData.embeds || { SUB: [], DUB: [] },
+          downloads: episodeData.downloads || { SUB: [], DUB: [] },
+        };
 
-    return episodeDetail;
+        return episodeDetail;
+      }
+    }
+
+    return null;
   } catch (e) {
     console.error('Failed to parse episode data:', e);
     return null;

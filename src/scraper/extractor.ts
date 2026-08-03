@@ -279,6 +279,19 @@ export async function searchAnime(query: string): Promise<CatalogItem[]> {
 }
 
 /**
+ * Rewrites zilla-networks player page URLs to their direct m3u8 stream.
+ * The player at /play/<id> just loads /m3u8/<id> via JW Player, and the
+ * play page is referer-protected (403 when embedded outside animeav1).
+ */
+function resolveStreamUrl(url: string): string {
+  const match = url.match(/^https?:\/\/player\.zilla-networks\.com\/play\/([a-f0-9]{32})\/?$/i);
+  if (match) {
+    return `https://player.zilla-networks.com/m3u8/${match[1]}`;
+  }
+  return url;
+}
+
+/**
  * Gets full episode data including mirrors and downloads
  */
 export async function getEpisode(animeSlug: string, episodeNumber: number): Promise<EpisodeDetail | null> {
@@ -335,6 +348,15 @@ export async function getEpisode(animeSlug: string, episodeNumber: number): Prom
           embeds: episodeData.embeds || { SUB: [], DUB: [] },
           downloads: episodeData.downloads || { SUB: [], DUB: [] },
         };
+
+        for (const variant of ['SUB', 'DUB'] as const) {
+          const links = episodeDetail.embeds?.[variant];
+          if (Array.isArray(links)) {
+            for (const link of links) {
+              link.url = resolveStreamUrl(link.url);
+            }
+          }
+        }
 
         return episodeDetail;
       }
